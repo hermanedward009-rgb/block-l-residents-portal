@@ -86,6 +86,12 @@ npm run dev
 - File uploads stored on `public` disk (`avatars/`, `receipts/`)
 - Only **approved** accounts access the main portal
 
+## Deploy to Render (one click)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/hermanedward009-rgb/block-l-residents-portal)
+
+After the first deploy, set **APP_URL** in the Render dashboard to your service URL (`https://….onrender.com`), save, and redeploy.
+
 ## License
 
 MIT — for Block L internal resident use.
