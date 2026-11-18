@@ -8,7 +8,8 @@ services:
     repo: https://github.com/hermanedward009-rgb/block-l-residents-portal
     branch: main
     plan: free
-    region: frankfurt
+  # Must match Postgres region (block-l-db) or private DATABASE_URL won't resolve.
+    region: oregon
     healthCheckPath: /up
     autoDeploy: true
     envVars:
@@ -58,6 +59,6 @@ services:
 databases:
   - name: block-l-db
     plan: free
-    region: frankfurt
+    region: oregon
     databaseName: block_l
     user: block_l_user
