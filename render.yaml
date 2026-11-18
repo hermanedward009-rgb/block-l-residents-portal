@@ -36,7 +36,9 @@ services:
           type: web
           envVarKey: RENDER_EXTERNAL_URL
       - key: DB_CONNECTION
-        value: pgsql
+        value: sqlite
+      - key: DB_DATABASE
+        value: /var/www/html/storage/app/block-l.sqlite
       - key: SESSION_DRIVER
         value: database
       - key: CACHE_STORE
@@ -45,20 +47,5 @@ services:
         value: database
       - key: FILESYSTEM_DISK
         value: public
-      - key: DATABASE_URL
-        fromDatabase:
-          name: block-l-db
-          property: connectionString
-      - key: DB_URL
-        fromDatabase:
-          name: block-l-db
-          property: connectionString
-      - key: DB_SSLMODE
-        value: require
 
-databases:
-  - name: block-l-db
-    plan: free
-    region: oregon
-    databaseName: block_l
-    user: block_l_user
+# Optional: add Postgres later and set DATABASE_URL + DB_CONNECTION=pgsql
