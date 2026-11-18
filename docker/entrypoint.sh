@@ -15,12 +15,12 @@ normalize_db_url() {
     case "$url" in
         postgresql://*@dpg-*)
             if ! echo "$url" | grep -q 'postgres.render.com'; then
-                url=$(echo "$url" | sed -E 's@(postgresql?://[^@]+@)dpg-([a-z0-9-]+)(/.*)?$@\1dpg-\2.oregon-postgres.render.com\3@')
+                url=$(echo "$url" | sed -E 's@(postgres(ql)?://[^@]+@)dpg-([a-z0-9-]+)(/.*)?$@\1dpg-\3.oregon-postgres.render.com\4@')
             fi
             ;;
         postgres://*@dpg-*)
             if ! echo "$url" | grep -q 'postgres.render.com'; then
-                url=$(echo "$url" | sed -E 's@(postgresql?://[^@]+@)dpg-([a-z0-9-]+)(/.*)?$@\1dpg-\2.oregon-postgres.render.com\3@')
+                url=$(echo "$url" | sed -E 's@(postgres(ql)?://[^@]+@)dpg-([a-z0-9-]+)(/.*)?$@\1dpg-\3.oregon-postgres.render.com\4@')
             fi
             ;;
     esac
