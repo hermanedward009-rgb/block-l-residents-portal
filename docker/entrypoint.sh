@@ -4,11 +4,17 @@ set -e
 php artisan storage:link --force 2>/dev/null || true
 php artisan config:clear --no-interaction 2>/dev/null || true
 
+# Render may set DB_CONNECTION=pgsql with an empty DATABASE_URL — use SQLite instead.
+if [ -z "$DATABASE_URL" ] && [ -z "$DB_URL" ]; then
+    export DB_CONNECTION=sqlite
+fi
+
 if [ "$DB_CONNECTION" = "sqlite" ]; then
     DB_FILE="${DB_DATABASE:-/var/www/html/storage/app/block-l.sqlite}"
     export DB_DATABASE="$DB_FILE"
     mkdir -p "$(dirname "$DB_FILE")"
     touch "$DB_FILE"
+    chmod 664 "$DB_FILE" 2>/dev/null || true
 elif [ -n "$DATABASE_URL" ] || [ -n "$DB_URL" ]; then
     normalize_db_url() {
         url="$1"
