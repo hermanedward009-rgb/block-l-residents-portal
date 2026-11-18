@@ -4,7 +4,7 @@
 <form method="POST" action="{{ route('notifications.read-all') }}" class="mb-4 text-right">@csrf<button class="btn-secondary text-xs">Mark all read</button></form>
 <div class="space-y-3">
     @forelse ($notifications as $notification)
-        <div class="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 {{ $notification->read_at ? 'opacity-75' : 'border-l-4 border-l-emerald-500' }}">
+        <div class="flex items-start justify-between gap-4 portal-card p-4 transition hover:scale-[1.01] {{ $notification->read_at ? 'opacity-75' : 'border-l-4 border-l-emerald-500 shadow-emerald-100' }}">
             <div>
                 <p class="font-semibold text-navy-900">{{ $notification->title }}</p>
                 <p class="mt-1 text-sm text-slate-600">{{ $notification->body }}</p>

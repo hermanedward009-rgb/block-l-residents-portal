@@ -4,8 +4,10 @@ set -e
 php artisan storage:link --force 2>/dev/null || true
 php artisan config:clear --no-interaction 2>/dev/null || true
 
-# Render may set DB_CONNECTION=pgsql with an empty DATABASE_URL — use SQLite instead.
-if [ -z "$DATABASE_URL" ] && [ -z "$DB_URL" ]; then
+# Prefer SQLite from blueprint; ignore stale/empty Postgres URLs on the dashboard.
+if [ "$DB_CONNECTION" = "sqlite" ] || [ -z "$DATABASE_URL" ] || [ -z "${DATABASE_URL// }" ]; then
+    unset DATABASE_URL
+    unset DB_URL
     export DB_CONNECTION=sqlite
 fi
 

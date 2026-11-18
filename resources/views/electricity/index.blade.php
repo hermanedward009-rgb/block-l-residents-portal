@@ -8,14 +8,14 @@
     <div class="stat-card"><p class="text-xs text-slate-500">Outstanding rooms</p><p class="text-xl font-bold">{{ $activePeriod ? $summary['outstanding_rooms']->count() : '—' }}</p></div>
 </div>
 @if(!$activePeriod)
-    <p class="mb-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">No active electricity contribution period. Unpaid rooms are only listed after the admin sets an amount and deadline.</p>
+    <p class="portal-callout-warning mb-4">No active electricity contribution period. Unpaid rooms are only listed after the admin sets an amount and deadline.</p>
 @endif
 <div class="mb-4 flex flex-wrap gap-2">
     @unless(auth()->user()->isAdmin())
         <a href="{{ route('electricity.create') }}" class="btn-primary">Record payment</a>
     @endunless
 </div>
-<form method="GET" class="mb-4 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:grid-cols-5">
+<form method="GET" class="mb-4 grid gap-3 portal-card p-4 sm:grid-cols-5">
     <input type="number" name="room_number" min="1" max="10" value="{{ $filters['room_number'] ?? '' }}" placeholder="Room" class="form-input">
     <input type="text" name="resident" value="{{ $filters['resident'] ?? '' }}" placeholder="Resident name" class="form-input">
     <input type="date" name="payment_date" value="{{ $filters['payment_date'] ?? '' }}" class="form-input">
@@ -27,9 +27,9 @@
     </select>
     <button class="btn-secondary">Filter</button>
 </form>
-<div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-    <table class="min-w-full text-sm">
-        <thead class="bg-slate-50 text-left text-xs uppercase text-slate-500">
+<div class="portal-table-wrap">
+    <table class="portal-table">
+        <thead>
             <tr>
                 <th class="px-4 py-3">Resident</th><th class="px-4 py-3">Room</th><th class="px-4 py-3">Amount</th><th class="px-4 py-3">Date</th><th class="px-4 py-3">Method</th><th class="px-4 py-3">Reference</th><th class="px-4 py-3">Status</th>
                 @if(auth()->user()->isAdmin())<th class="px-4 py-3">Actions</th>@endif
@@ -48,9 +48,9 @@
                     @if(auth()->user()->isAdmin())
                         <td class="px-4 py-3">
                             @if($payment->status->value === 'pending')
-                                <form method="POST" action="{{ route('admin.electricity.verify', $payment) }}" class="inline">@csrf<button class="text-emerald-600 hover:underline">Verify</button></form>
+                                <form method="POST" action="{{ route('admin.electricity.verify', $payment) }}" class="inline">@csrf<button class="btn-inline-success">Verify</button></form>
                                 <details class="inline ml-2">
-                                    <summary class="cursor-pointer text-red-600">Reject</summary>
+                                    <summary class="btn-inline-danger cursor-pointer list-none">Reject</summary>
                                     <form method="POST" action="{{ route('admin.electricity.reject', $payment) }}" class="mt-2 w-48">@csrf
                                         <textarea name="rejection_reason" required class="form-input text-xs" placeholder="Reason"></textarea>
                                         <button class="mt-1 text-xs text-red-700">Confirm</button>

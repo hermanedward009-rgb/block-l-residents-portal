@@ -25,7 +25,7 @@
     @php $hasRows = false; @endphp
     @foreach($schedules as $day => $rows)
         @php $hasRows = true; @endphp
-        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm animate-fade-in">
+        <section class="overflow-hidden portal-card shadow-sm animate-fade-in">
             <div class="border-b border-slate-100 bg-navy-900 px-4 py-3 text-sm font-semibold text-white">{{ $day }}</div>
             <div class="grid gap-3 p-4 sm:grid-cols-2">
                 @foreach($rows->sortBy('toilet_type') as $schedule)
@@ -39,7 +39,7 @@
                             @php $assignees = $schedule->room->activeResidents ?? collect(); @endphp
                             @if($assignees->isNotEmpty())
                                 @foreach($assignees as $resident)
-                                    <img src="{{ $resident->avatarUrl() }}" alt="" class="h-10 w-10 rounded-full border-2 border-white shadow">
+                                    @include('partials.avatar', ['user' => $resident, 'size' => 'sm', 'class' => 'ring-2 ring-white shadow'])
                                 @endforeach
                             @endif
                             <p class="text-lg font-bold text-navy-900">{{ $schedule->assigneeLabelFor($user) }}</p>

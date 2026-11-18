@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAdviceController;
+use App\Http\Controllers\Admin\AdminActivityController;
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminCleaningController;
 use App\Http\Controllers\Admin\AdminDashboardController;
@@ -42,6 +43,7 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     Route::get('/electricity', [ElectricityController::class, 'index'])->name('electricity.index');
     Route::get('/electricity/submit', [ElectricityController::class, 'create'])->name('electricity.create');
@@ -66,8 +68,12 @@ Route::middleware(['auth', 'approved'])->group(function () {
 
 Route::middleware(['auth', 'approved', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    Route::post('/activity/clear', [AdminActivityController::class, 'clear'])->name('activity.clear');
 
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::put('/users/{user}/password', [AdminUserController::class, 'updatePassword'])->name('users.password');
     Route::post('/users/{user}/approve', [AdminUserController::class, 'approve'])->name('users.approve');
     Route::post('/users/{user}/reject', [AdminUserController::class, 'reject'])->name('users.reject');
     Route::post('/users/{user}/deactivate', [AdminUserController::class, 'deactivate'])->name('users.deactivate');

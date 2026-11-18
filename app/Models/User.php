@@ -83,7 +83,7 @@ class User extends Authenticatable
     public function avatarUrl(): string
     {
         if ($this->profile_picture && Storage::disk('public')->exists($this->profile_picture)) {
-            return Storage::disk('public')->url($this->profile_picture);
+            return Storage::disk('public')->url($this->profile_picture).'?v='.substr(md5($this->updated_at?->timestamp.$this->profile_picture), 0, 8);
         }
 
         $initial = strtoupper(substr($this->name, 0, 1));

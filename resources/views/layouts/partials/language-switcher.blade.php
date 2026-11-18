@@ -1,5 +1,5 @@
 @php $current = app()->getLocale(); @endphp
-<div class="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-0.5 text-xs font-semibold shadow-sm" role="group" aria-label="{{ __('portal.language') }}">
-    <a href="{{ route('language.switch', 'en') }}" class="rounded-lg px-2.5 py-1.5 {{ $current === 'en' ? 'bg-navy-800 text-white' : 'text-slate-600 hover:bg-slate-50' }}">EN</a>
-    <a href="{{ route('language.switch', 'sw') }}" class="rounded-lg px-2.5 py-1.5 {{ $current === 'sw' ? 'bg-navy-800 text-white' : 'text-slate-600 hover:bg-slate-50' }}">SW</a>
+<div class="flex items-center gap-0.5 rounded-full border border-slate-200 bg-white/90 p-0.5 text-xs font-semibold shadow-sm backdrop-blur transition hover:border-emerald-200 hover:shadow-md" role="group" aria-label="{{ __('portal.language') }}">
+    <a href="{{ route('language.switch', 'en') }}" class="rounded-full px-2.5 py-1.5 transition {{ $current === 'en' ? 'bg-gradient-to-r from-navy-800 to-navy-900 text-white shadow-sm' : 'text-slate-600 hover:bg-emerald-50 hover:text-navy-900' }}">EN</a>
+    <a href="{{ route('language.switch', 'sw') }}" class="rounded-full px-2.5 py-1.5 transition {{ $current === 'sw' ? 'bg-gradient-to-r from-navy-800 to-navy-900 text-white shadow-sm' : 'text-slate-600 hover:bg-emerald-50 hover:text-navy-900' }}">SW</a>
 </div>

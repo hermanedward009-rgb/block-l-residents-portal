@@ -39,6 +39,10 @@ services:
         value: sqlite
       - key: DB_DATABASE
         value: /var/www/html/storage/app/block-l.sqlite
+      - key: DATABASE_URL
+        value: ""
+      - key: DB_URL
+        value: ""
       - key: SESSION_DRIVER
         value: database
       - key: CACHE_STORE

@@ -7,6 +7,7 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\User;
+use App\Services\PortalFileUpload;
 use App\Services\PortalNotifier;
 use App\Services\RoomRegistrationGuard;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class RegisterController extends Controller
             'phone' => ['required', 'string', 'max:30'],
             'room_number' => ['required', 'integer', Rule::in(range(1, 10))],
             'password' => ['required', 'confirmed', Password::defaults()],
-            'profile_picture' => ['nullable', 'image', 'max:2048'],
+            'profile_picture' => PortalFileUpload::imageRules(),
         ]);
 
         if (! RoomRegistrationGuard::roomAvailable((int) $validated['room_number'])) {
@@ -42,10 +43,9 @@ class RegisterController extends Controller
                 ]);
         }
 
-        $profilePath = null;
-        if ($request->hasFile('profile_picture')) {
-            $profilePath = $request->file('profile_picture')->store('avatars', 'public');
-        }
+        $profilePath = $request->hasFile('profile_picture')
+            ? PortalFileUpload::storeProfileImage($request->file('profile_picture'))
+            : null;
 
         $user = User::create([
             'name' => $validated['name'],

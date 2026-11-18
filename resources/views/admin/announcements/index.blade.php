@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('heading', 'Publish announcements')
 @section('content')
-<form method="POST" action="{{ route('admin.announcements.store') }}" class="mb-8 max-w-2xl space-y-3 rounded-2xl border border-slate-200 bg-white p-5">
+<form method="POST" action="{{ route('admin.announcements.store') }}" class="mb-8 max-w-2xl space-y-3 portal-card p-5">
     @csrf
     <input name="title" placeholder="Title" class="form-input" required>
     <textarea name="body" rows="5" class="form-input" placeholder="Announcement details" required></textarea>

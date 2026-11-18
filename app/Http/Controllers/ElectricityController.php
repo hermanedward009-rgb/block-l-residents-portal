@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\PaymentStatus;
 use App\Models\ElectricityPayment;
 use App\Models\ElectricityPeriod;
+use App\Services\PortalFileUpload;
 use App\Services\PortalNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -78,13 +79,12 @@ class ElectricityController extends Controller
             'payment_date' => ['required', 'date', 'before_or_equal:today'],
             'payment_method' => ['required', Rule::in(['Mobile Money', 'Bank', 'Cash', 'Other'])],
             'transaction_reference' => ['nullable', 'string', 'max:120'],
-            'receipt' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:4096'],
+            'receipt' => PortalFileUpload::receiptRules(),
         ]);
 
-        $receiptPath = null;
-        if ($request->hasFile('receipt')) {
-            $receiptPath = $request->file('receipt')->store('receipts', 'public');
-        }
+        $receiptPath = $request->hasFile('receipt')
+            ? PortalFileUpload::storeReceipt($request->file('receipt'))
+            : null;
 
         $payment = ElectricityPayment::create([
             'user_id' => $user->id,

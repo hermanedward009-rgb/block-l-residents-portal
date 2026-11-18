@@ -5,19 +5,25 @@
     <a href="{{ route('admin.reports.pdf') }}" class="btn-primary">Export PDF</a>
     <a href="{{ route('admin.reports.excel') }}" class="btn-secondary">Export Excel (CSV)</a>
 </div>
-<h3 class="font-semibold">Electricity by room (verified)</h3>
-<table class="mt-3 w-full overflow-hidden rounded-xl border border-slate-200 bg-white text-sm">
-    <thead class="bg-slate-50"><tr><th class="px-4 py-2 text-left">Room</th><th class="px-4 py-2 text-left">Payments</th><th class="px-4 py-2 text-left">Total TZS</th></tr></thead>
-    <tbody>
-        @foreach($byRoom as $row)
-            <tr class="border-t border-slate-100"><td class="px-4 py-2">Room {{ $row['room'] }}</td><td class="px-4 py-2">{{ $row['count'] }}</td><td class="px-4 py-2">{{ number_format($row['total'], 2) }}</td></tr>
+<section class="dashboard-panel">
+    <h3 class="dashboard-panel-title"><span aria-hidden="true">⚡</span> Electricity by room (verified)</h3>
+    <div class="portal-table-wrap mt-4 border-0 p-0 shadow-none ring-0 hover:shadow-none">
+        <table class="portal-table">
+            <thead><tr><th>Room</th><th>Payments</th><th>Total TZS</th></tr></thead>
+            <tbody>
+                @foreach($byRoom as $row)
+                    <tr><td>Room {{ $row['room'] }}</td><td>{{ $row['count'] }}</td><td>{{ number_format($row['total'], 2) }}</td></tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</section>
+<section class="dashboard-panel mt-6">
+    <h3 class="dashboard-panel-title"><span aria-hidden="true">📅</span> Monthly verified payments</h3>
+    <ul class="mt-4 space-y-1 text-sm text-slate-600">
+        @foreach($monthlyPayments as $row)
+            <li class="portal-list-row">{{ $row->month }} — TZS {{ number_format($row->total, 2) }}</li>
         @endforeach
-    </tbody>
-</table>
-<h3 class="mt-8 font-semibold">Monthly verified payments</h3>
-<ul class="mt-2 text-sm text-slate-600">
-    @foreach($monthlyPayments as $row)
-        <li>{{ $row->month }} — TZS {{ number_format($row->total, 2) }}</li>
-    @endforeach
-</ul>
+    </ul>
+</section>
 @endsection

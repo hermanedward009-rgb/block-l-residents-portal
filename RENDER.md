@@ -4,7 +4,8 @@ Your project is **Docker-ready** for [Render](https://render.com) with a free **
 
 ## What you get on Render
 
-- Public **HTTPS URL** (e.g. `https://block-l-residents-portal.onrender.com`)
+- Public **HTTPS URL** (share with members): **https://block-l-residents-portal.onrender.com/login**
+- Free tier sleeps after ~15 min idle; first visit may take 30–60s to wake up.
 - **Postgres** database (migrations + seeder run on each deploy)
 - Default **admin** after first deploy: `admin@blockl.local` / `BlockLAdmin2026!`
 
@@ -51,9 +52,21 @@ git push -u origin main
 
 Change the admin password after first login when you add that feature.
 
+## If deploy fails (database)
+
+On the web service **Environment** tab, set:
+
+- `DB_CONNECTION` = `sqlite`
+- `DB_DATABASE` = `/var/www/html/storage/app/block-l.sqlite`
+
+Remove or clear empty `DATABASE_URL` if present. Then **Manual Deploy → Clear build cache & deploy**.
+
+(Blueprint sync from repo also applies these from `render.yaml`.)
+
 ## Notes
 
 - **Free tier** web services **sleep** when idle; first load may take 30–60 seconds.
+- SQLite on free tier **resets on redeploy** unless you add a Render Disk; Postgres is better for long-term production.
 - **Uploads** (avatars, receipts) on free tier use ephemeral disk; for production, add **Render Disk** or external storage (S3/Blob).
 - **VAPID** keys for push: add `VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` in Render env if you enable web push.
 

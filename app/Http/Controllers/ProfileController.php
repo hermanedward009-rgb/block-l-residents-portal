@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\CleaningSchedule;
+use App\Services\PortalFileUpload;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -29,20 +30,34 @@ class ProfileController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'profile_picture' => ['nullable', 'image', 'max:2048'],
+            'profile_picture' => PortalFileUpload::imageRules(),
         ]);
 
         if ($request->hasFile('profile_picture')) {
-            if ($user->profile_picture) {
-                Storage::disk('public')->delete($user->profile_picture);
-            }
-            $validated['profile_picture'] = $request->file('profile_picture')->store('avatars', 'public');
+            $validated['profile_picture'] = PortalFileUpload::storeProfileImage(
+                $request->file('profile_picture'),
+                $user->profile_picture,
+            );
         } else {
             unset($validated['profile_picture']);
         }
 
         $user->update($validated);
 
-        return back()->with('status', 'Profile updated successfully.');
+        return back()->with('status', __('portal.profile_updated'));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        $request->user()->update([
+            'password' => $validated['password'],
+        ]);
+
+        return back()->with('status', __('portal.password_updated'));
     }
 }

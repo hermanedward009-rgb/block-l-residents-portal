@@ -15,7 +15,7 @@
 @if($active)
     <p class="mb-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">Active period: <strong>{{ $active->title }}</strong> — TZS {{ number_format($active->amount_tzs, 2) }}</p>
 @endif
-<form method="POST" action="{{ route('admin.electricity.periods.store') }}" class="mb-8 grid max-w-2xl gap-3 rounded-2xl border border-slate-200 bg-white p-5">
+<form method="POST" action="{{ route('admin.electricity.periods.store') }}" class="mb-8 grid max-w-2xl gap-3 portal-card p-5">
     @csrf
     <input name="title" placeholder="Period title" class="form-input" required>
     <input type="number" step="0.01" name="amount_tzs" placeholder="Amount per room (TZS)" class="form-input" required>

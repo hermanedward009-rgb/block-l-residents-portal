@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('heading', 'Submit electricity payment')
 @section('content')
-<div class="mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-6">
+<div class="mx-auto max-w-2xl portal-card p-6">
     <p class="text-sm text-slate-600">Resident: <strong>{{ $user->name }}</strong> · Room <strong>{{ $user->room_number }}</strong></p>
     @if($activePeriod)
         <p class="mt-2 text-sm">Suggested contribution: TZS {{ number_format($activePeriod->amount_tzs, 2) }} ({{ $activePeriod->title }})</p>
@@ -16,7 +16,12 @@
             </select>
         </div>
         <div><label class="text-sm font-medium">Transaction reference</label><input name="transaction_reference" class="form-input mt-1"></div>
-        <div><label class="text-sm font-medium">Receipt (optional)</label><input type="file" name="receipt" accept=".jpg,.jpeg,.png,.pdf" class="form-input mt-1"></div>
+        <div>
+            <label class="text-sm font-medium">Receipt (optional)</label>
+            <input type="file" name="receipt" accept="image/jpeg,image/png,application/pdf" class="form-input mt-1">
+            <p class="mt-1 text-xs text-slate-500">JPG, PNG or PDF · max 5MB</p>
+            @error('receipt')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+        </div>
         <button class="btn-primary">Submit for verification</button>
     </form>
 </div>

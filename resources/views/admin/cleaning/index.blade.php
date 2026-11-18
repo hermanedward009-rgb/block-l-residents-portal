@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('heading', 'Toilet rota (small & large)')
 @section('content')
-<form method="POST" action="{{ route('admin.cleaning.store') }}" class="mb-8 grid gap-3 rounded-2xl border border-slate-200 bg-white p-5 sm:grid-cols-2 lg:max-w-3xl">
+<form method="POST" action="{{ route('admin.cleaning.store') }}" class="mb-8 grid gap-3 portal-card p-5 sm:grid-cols-2 lg:max-w-3xl">
     @csrf
     <select name="room_id" class="form-input" required>@foreach($rooms as $room)<option value="{{ $room->id }}">{{ $room->label }}</option>@endforeach</select>
     <select name="toilet_type" class="form-input" required>
@@ -17,10 +17,10 @@
     <input name="notes" placeholder="Notes" class="form-input sm:col-span-2">
     <button class="btn-primary w-fit">Add duty</button>
 </form>
-<div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-    <table class="min-w-full text-sm">
-        <thead class="bg-slate-50 text-xs uppercase"><tr><th class="px-4 py-3">Toilet</th><th class="px-4 py-3">Assigned resident(s)</th><th class="px-4 py-3">Day</th><th class="px-4 py-3">Done</th><th class="px-4 py-3">Actions</th></tr></thead>
-        <tbody class="divide-y divide-slate-100">
+<div class="portal-table-wrap">
+    <table class="portal-table">
+        <thead><tr><th>Toilet</th><th>Assigned resident(s)</th><th>Day</th><th>Done</th><th>Actions</th></tr></thead>
+        <tbody>
             @foreach($schedules as $schedule)
                 <tr>
                     <td class="px-4 py-3"><span class="rounded-full px-2 py-0.5 text-xs font-semibold {{ $schedule->toilet_type->badgeClass() }}">{{ $schedule->toilet_type->label() }}</span></td>
@@ -29,9 +29,9 @@
                     <td class="px-4 py-3">{{ $schedule->is_completed ? 'Yes' : 'No' }}</td>
                     <td class="px-4 py-3 text-xs space-x-2">
                         @unless($schedule->is_completed)
-                            <form method="POST" action="{{ route('admin.cleaning.complete', $schedule) }}" class="inline">@csrf<button class="text-emerald-600">Complete</button></form>
+                            <form method="POST" action="{{ route('admin.cleaning.complete', $schedule) }}" class="inline">@csrf<button class="btn-inline-success">Complete</button></form>
                         @endunless
-                        <form method="POST" action="{{ route('admin.cleaning.destroy', $schedule) }}" class="inline">@csrf @method('DELETE')<button class="text-red-600">Remove</button></form>
+                        <form method="POST" action="{{ route('admin.cleaning.destroy', $schedule) }}" class="inline">@csrf @method('DELETE')<button class="btn-inline-danger">Remove</button></form>
                     </td>
                 </tr>
             @endforeach
