@@ -1,8 +1,10 @@
 @extends('layouts.guest')
 @section('title', __('portal.register').' — Block L')
 @section('content')
-<h2 class="text-lg font-semibold text-navy-900">{{ __('portal.join_block_l') }}</h2>
-<form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="mt-6 space-y-4">
+<header class="border-b border-slate-100 pb-6 text-center sm:text-left">
+    <h2 class="text-2xl font-bold tracking-tight text-navy-900 lg:text-[1.65rem]">{{ __('portal.join_block_l') }}</h2>
+</header>
+<form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="mt-8 space-y-4">
     @csrf
     <div>
         <label class="text-sm font-medium">{{ __('portal.full_name') }}</label>
