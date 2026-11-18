@@ -48,9 +48,16 @@ services:
         fromDatabase:
           name: block-l-db
           property: connectionString
+      - key: DB_URL
+        fromDatabase:
+          name: block-l-db
+          property: connectionString
+      - key: DB_SSLMODE
+        value: require
 
 databases:
   - name: block-l-db
     plan: free
+    region: frankfurt
     databaseName: block_l
     user: block_l_user

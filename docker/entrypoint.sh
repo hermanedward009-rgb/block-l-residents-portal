@@ -3,6 +3,12 @@ set -e
 
 php artisan storage:link --force 2>/dev/null || true
 php artisan config:clear --no-interaction 2>/dev/null || true
+
+if [ -z "$DATABASE_URL" ] && [ -z "$DB_URL" ]; then
+    echo "ERROR: DATABASE_URL (or DB_URL) is not set — cannot connect to Postgres."
+    exit 1
+fi
+
 php artisan migrate --force --no-interaction
 php artisan db:seed --class=Database\\Seeders\\BlockLSeeder --force --no-interaction || true
 php artisan config:cache
