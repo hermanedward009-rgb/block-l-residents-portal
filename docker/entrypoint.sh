@@ -9,6 +9,35 @@ if [ -z "$DATABASE_URL" ] && [ -z "$DB_URL" ]; then
     exit 1
 fi
 
+# Render private hostnames (dpg-xxx-a) only resolve in the same region; use public hostname.
+normalize_db_url() {
+    url="$1"
+    case "$url" in
+        postgresql://*@dpg-*)
+            if ! echo "$url" | grep -q 'postgres.render.com'; then
+                url=$(echo "$url" | sed -E 's@(postgresql?://[^@]+@)dpg-([a-z0-9-]+)(/.*)?$@\1dpg-\2.oregon-postgres.render.com\3@')
+            fi
+            ;;
+        postgres://*@dpg-*)
+            if ! echo "$url" | grep -q 'postgres.render.com'; then
+                url=$(echo "$url" | sed -E 's@(postgresql?://[^@]+@)dpg-([a-z0-9-]+)(/.*)?$@\1dpg-\2.oregon-postgres.render.com\3@')
+            fi
+            ;;
+    esac
+    case "$url" in
+        *\?*) url="${url}&sslmode=require" ;;
+        *) url="${url}?sslmode=require" ;;
+    esac
+    echo "$url"
+}
+
+if [ -n "$DATABASE_URL" ]; then
+    export DATABASE_URL="$(normalize_db_url "$DATABASE_URL")"
+fi
+if [ -n "$DB_URL" ]; then
+    export DB_URL="$(normalize_db_url "$DB_URL")"
+fi
+
 php artisan migrate --force --no-interaction
 php artisan db:seed --class=Database\\Seeders\\BlockLSeeder --force --no-interaction || true
 php artisan config:cache
