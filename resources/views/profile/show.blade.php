@@ -66,7 +66,18 @@
                 <h4 class="font-semibold">My cleaning assignments</h4>
                 <ul class="mt-2 space-y-1 text-sm text-slate-600">
                     @forelse ($cleaning as $row)
-                        <li class="portal-list-row"><strong>{{ $user->name }}</strong> — {{ \App\Models\CleaningSchedule::dayName($row->day_of_week) }} · {{ $row->toilet_type?->label() ?? 'Duty' }}</li>
+                        <li class="portal-list-row">
+                            <span class="rounded-full px-2 py-0.5 text-xs font-semibold {{ $row->toilet_type?->badgeClass() }}">{{ $row->toilet_type?->label() }}</span>
+                            {{ \App\Models\CleaningSchedule::dayName($row->day_of_week) }}
+                            <div class="mt-1">
+                                @include('partials.room-resident-list', [
+                                    'room' => $row->room,
+                                    'highlightUser' => $user,
+                                    'compact' => true,
+                                    'listClass' => 'text-sm text-navy-900',
+                                ])
+                            </div>
+                        </li>
                     @empty
                         <li>No assignments for your room yet.</li>
                     @endforelse

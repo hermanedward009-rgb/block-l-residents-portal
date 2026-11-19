@@ -10,12 +10,17 @@
 <section class="portal-callout-info mb-6 p-4">
     <h3 class="text-sm font-bold text-emerald-900">Today's toilet duty</h3>
     <div class="mt-3 grid gap-2 sm:grid-cols-2">
-        @foreach($todayDuties as $duty)
+        @foreach($todayDuties->sortBy(fn ($d) => $d->toilet_type->value) as $duty)
             @php $isMine = $duty->isDutyFor(auth()->user()); @endphp
             <div class="portal-tile bg-white px-3 py-2 {{ $isMine ? 'ring-2 ring-emerald-400' : '' }}">
                 <span class="text-xs font-semibold {{ $duty->toilet_type->badgeClass() }} rounded-full px-2 py-0.5">{{ $duty->toilet_type->label() }}</span>
-                @if($isMine)<span class="text-[10px] font-bold text-emerald-700"> · Your duty today</span>@endif
-                <p class="mt-1 font-semibold text-navy-900">{{ $duty->assigneeLabelFor(auth()->user()) }}</p>
+                @if($isMine)<span class="text-[10px] font-bold text-emerald-700"> · {{ __('portal.your_duty') }}</span>@endif
+                @include('partials.room-resident-list', [
+                    'room' => $duty->room,
+                    'highlightUser' => auth()->user(),
+                    'compact' => true,
+                    'listClass' => 'mt-2 text-sm font-semibold text-navy-900',
+                ])
             </div>
         @endforeach
     </div>
@@ -56,8 +61,11 @@
         <h3 class="dashboard-panel-title text-navy-900"><span aria-hidden="true">🚽</span> Upcoming cleaning</h3>
         <ul class="mt-3 space-y-2 text-sm">
             @forelse ($upcomingCleaning as $item)
-                <li class="portal-list-row flex justify-between bg-slate-50/80">
-                    <span>{{ $item->room->label }} — {{ \App\Models\CleaningSchedule::dayName($item->day_of_week) }}</span>
+                <li class="portal-list-row flex flex-wrap justify-between gap-2 bg-slate-50/80">
+                    <span>
+                        <span class="font-semibold text-navy-900">{{ implode(' · ', $item->dutyNames()) ?: 'Unassigned' }}</span>
+                        <span class="text-slate-500"> — {{ \App\Models\CleaningSchedule::dayName($item->day_of_week) }} · {{ $item->toilet_type?->label() }}</span>
+                    </span>
                     <span class="text-slate-500">{{ $item->scheduled_date?->format('M j') ?? 'Weekly' }}</span>
                 </li>
             @empty

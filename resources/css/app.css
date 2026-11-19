@@ -269,6 +269,17 @@
     @apply transition hover:text-emerald-800;
 }
 
+.admin-rota-compact .portal-table th,
+.admin-rota-compact .portal-table td {
+    @apply px-2 py-1.5;
+}
+
+.admin-rota-compact .btn-inline-neutral,
+.admin-rota-compact .btn-inline-success,
+.admin-rota-compact .btn-inline-danger {
+    @apply px-1.5 py-0.5 text-[10px];
+}
+
 .portal-app .pagination a,
 .portal-app .pagination span {
     @apply transition hover:bg-emerald-50;

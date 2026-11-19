@@ -23,11 +23,14 @@
                 <input name="label" value="{{ $room->label }}" class="form-input text-sm" required>
                 <button type="submit" class="btn-inline-neutral">Save name</button>
             </form>
-            @if($names = $room->residentNames())
-                <p class="mt-2 text-xs text-slate-600">Residents: {{ implode(', ', $names) }}</p>
-            @else
-                <p class="mt-2 text-xs text-slate-400">No residents yet</p>
-            @endif
+            <div class="mt-2">
+                @include('partials.room-resident-list', [
+                    'room' => $room,
+                    'compact' => true,
+                    'listClass' => 'text-xs text-slate-600',
+                    'emptyText' => 'No residents yet',
+                ])
+            </div>
             <p class="mt-1 text-xs text-slate-500">Slot #{{ $room->number }} · {{ $occ['count'] }}/{{ $occ['max'] }} members</p>
             <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
                 <div class="h-full rounded-full bg-emerald-500 transition-all" style="width: {{ min(100, ($occ['count'] / max(1, $occ['max'])) * 100) }}%"></div>

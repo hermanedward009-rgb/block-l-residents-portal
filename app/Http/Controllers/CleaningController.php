@@ -20,7 +20,7 @@ class CleaningController extends Controller
 
         $myDuties = $user->room_number
             ? CleaningSchedule::query()
-                ->with('room')
+                ->with(['room.activeResidents'])
                 ->whereHas('room', fn ($q) => $q->where('number', $user->room_number))
                 ->orderBy('day_of_week')
                 ->get()

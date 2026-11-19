@@ -30,7 +30,7 @@ class DashboardController extends Controller
             ->get();
 
         $upcomingCleaning = CleaningSchedule::query()
-            ->with('room')
+            ->with('room.activeResidents')
             ->where('is_completed', false)
             ->orderBy('day_of_week')
             ->limit(6)

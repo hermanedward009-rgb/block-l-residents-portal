@@ -27,7 +27,7 @@ class AdminUserController extends Controller
             ->paginate(25)
             ->withQueryString();
 
-        $rooms = Room::query()->orderBy('number')->get();
+        $rooms = Room::query()->with('activeResidents')->orderBy('number')->get();
         $accountCounts = [
             'total' => User::query()->count(),
             'admins' => User::query()->where('role', UserRole::Admin)->count(),
@@ -39,7 +39,7 @@ class AdminUserController extends Controller
 
     public function show(User $user)
     {
-        $rooms = Room::query()->orderBy('number')->get();
+        $rooms = Room::query()->with('activeResidents')->orderBy('number')->get();
 
         return view('admin.users.show', compact('user', 'rooms'));
     }

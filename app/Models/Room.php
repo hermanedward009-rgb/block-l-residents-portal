@@ -60,4 +60,20 @@ class Room extends Model
 
         return $names !== [] ? implode(' & ', $names) : 'Awaiting resident assignment';
     }
+
+    /** Room label for selects (names listed separately on the page, not joined). */
+    public function cleaningOptionLabel(): string
+    {
+        $count = $this->relationLoaded('activeResidents')
+            ? $this->activeResidents->count()
+            : $this->activeResidents()->count();
+
+        if ($count === 0) {
+            return $this->displayName().' — '.__('portal.no_residents');
+        }
+
+        $memberWord = $count === 1 ? __('portal.member') : __('portal.members');
+
+        return $this->displayName().' — '.$count.' '.$memberWord;
+    }
 }

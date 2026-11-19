@@ -10,6 +10,7 @@ class CleaningSchedule extends Model
 {
     protected $fillable = [
         'room_id',
+        'assigned_user_id',
         'day_of_week',
         'toilet_type',
         'scheduled_date',
@@ -34,6 +35,11 @@ class CleaningSchedule extends Model
         return $this->belongsTo(Room::class);
     }
 
+    public function assignedUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_user_id');
+    }
+
     public function completedByUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'completed_by');
@@ -55,7 +61,20 @@ class CleaningSchedule extends Model
             return $viewer->name;
         }
 
-        return $room->assigneeLabel();
+        $names = $room->residentNames();
+
+        return $names !== [] ? implode(' · ', $names) : 'Awaiting resident assignment';
+    }
+
+    /** @return list<string> */
+    public function dutyNames(): array
+    {
+        $room = $this->room;
+        if (! $room) {
+            return [];
+        }
+
+        return $room->residentNames();
     }
 
     public function isDutyFor(?User $user): bool
